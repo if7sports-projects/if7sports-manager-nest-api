@@ -22,12 +22,31 @@ let UsersService = class UsersService {
     constructor(userModel) {
         this.userModel = userModel;
     }
-    create(createDto) {
-        const created = new this.userModel(createDto);
+    async create(createUserDto) {
+        const { entityId, ...rest } = createUserDto;
+        const payload = {
+            ...rest,
+            ...(entityId ? { entityId: new mongoose_2.Types.ObjectId(entityId) } : {}),
+        };
+        const created = new this.userModel(payload);
         return created.save();
     }
-    findAll() {
+    async findAll() {
         return this.userModel.find().exec();
+    }
+    async update(id, updateUserDto) {
+        const { entityId, ...rest } = updateUserDto;
+        const payload = {
+            ...rest,
+            ...(entityId ? { entityId: new mongoose_2.Types.ObjectId(entityId) } : {}),
+        };
+        const updated = await this.userModel
+            .findByIdAndUpdate(id, payload, { new: true })
+            .exec();
+        if (!updated) {
+            throw new common_1.NotFoundException(`User con id ${id} no encontrado`);
+        }
+        return updated;
     }
 };
 exports.UsersService = UsersService;

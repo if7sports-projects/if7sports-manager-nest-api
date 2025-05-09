@@ -22,12 +22,39 @@ let EntitiesService = class EntitiesService {
     constructor(entityModel) {
         this.entityModel = entityModel;
     }
-    create(createDto) {
-        const created = new this.entityModel(createDto);
+    async create(dto) {
+        const { organizerId, staff, ...rest } = dto;
+        const payload = {
+            ...rest,
+            organizerId: new mongoose_2.Types.ObjectId(organizerId),
+            ...(staff
+                ? { staff: staff.map(id => new mongoose_2.Types.ObjectId(id)) }
+                : {}),
+        };
+        const created = new this.entityModel(payload);
         return created.save();
     }
-    findAll() {
+    async findAll() {
         return this.entityModel.find().exec();
+    }
+    async update(id, dto) {
+        const { organizerId, staff, ...rest } = dto;
+        const payload = {
+            ...rest,
+            ...(organizerId
+                ? { organizerId: new mongoose_2.Types.ObjectId(organizerId) }
+                : {}),
+            ...(staff
+                ? { staff: staff.map(id => new mongoose_2.Types.ObjectId(id)) }
+                : {}),
+        };
+        const updated = await this.entityModel
+            .findByIdAndUpdate(id, payload, { new: true })
+            .exec();
+        if (!updated) {
+            throw new common_1.NotFoundException(`Entity con id ${id} no encontrada`);
+        }
+        return updated;
     }
 };
 exports.EntitiesService = EntitiesService;

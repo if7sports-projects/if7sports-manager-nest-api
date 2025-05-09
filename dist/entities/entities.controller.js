@@ -15,6 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.EntitiesController = void 0;
 const common_1 = require("@nestjs/common");
 const entities_service_1 = require("./entities.service");
+const create_entity_dto_1 = require("./dto/create-entity.dto");
+const update_entity_dto_1 = require("./dto/update-entity.dto");
 let EntitiesController = class EntitiesController {
     entitiesService;
     constructor(entitiesService) {
@@ -26,13 +28,16 @@ let EntitiesController = class EntitiesController {
     findAll() {
         return this.entitiesService.findAll();
     }
+    update(id, updateEntityDto) {
+        return this.entitiesService.update(id, updateEntityDto);
+    }
 };
 exports.EntitiesController = EntitiesController;
 __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [create_entity_dto_1.CreateEntityDto]),
     __metadata("design:returntype", Promise)
 ], EntitiesController.prototype, "create", null);
 __decorate([
@@ -41,6 +46,14 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], EntitiesController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Patch)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, update_entity_dto_1.UpdateEntityDto]),
+    __metadata("design:returntype", Promise)
+], EntitiesController.prototype, "update", null);
 exports.EntitiesController = EntitiesController = __decorate([
     (0, common_1.Controller)('api/entities'),
     __metadata("design:paramtypes", [entities_service_1.EntitiesService])
