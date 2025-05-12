@@ -9,12 +9,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
+const logger_middleware_1 = require("./common/middleware/logger.middleware");
 const mongoose_1 = require("@nestjs/mongoose");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const users_module_1 = require("./users/users.module");
 const entities_module_1 = require("./entities/entities.module");
 let AppModule = class AppModule {
+    configure(consumer) {
+        consumer
+            .apply(logger_middleware_1.LoggerMiddleware)
+            .forRoutes('*');
+    }
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
