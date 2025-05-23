@@ -1,18 +1,20 @@
 // src/users/users.service.ts
 
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
-import { User, UserDocument } from './schemas/user.schema';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { InjectModel }                  from '@nestjs/mongoose';
+import { Model, Types }                 from 'mongoose';
+import { User, UserDocument }           from './schemas/user.schema';
+import { CreateUserDto }                from './dto/create-user.dto';
+import { UpdateUserDto }                from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(
+    @InjectModel(User.name) private userModel: Model<UserDocument>
+  ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<UserDocument> {
-    const { entityId, ...rest } = createUserDto;
+  async create(createDto: CreateUserDto): Promise<UserDocument> {
+    const { entityId, ...rest } = createDto;
     const payload: Partial<User> = {
       ...rest,
       ...(entityId ? { entityId: new Types.ObjectId(entityId) } : {}),
@@ -25,8 +27,15 @@ export class UsersService {
     return this.userModel.find().exec();
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto): Promise<UserDocument> {
-    const { entityId, ...rest } = updateUserDto;
+  async findByEmail(email: string): Promise<UserDocument | null> {
+    return this.userModel.findOne({ email }).exec();
+  }
+
+  async update(
+    id: string,
+    updateDto: UpdateUserDto
+  ): Promise<UserDocument> {
+    const { entityId, ...rest } = updateDto;
     const payload: Partial<User> = {
       ...rest,
       ...(entityId ? { entityId: new Types.ObjectId(entityId) } : {}),
@@ -39,7 +48,6 @@ export class UsersService {
     if (!updated) {
       throw new NotFoundException(`User con id ${id} no encontrado`);
     }
-
     return updated;
   }
 }

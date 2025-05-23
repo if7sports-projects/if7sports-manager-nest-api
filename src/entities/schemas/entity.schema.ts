@@ -1,5 +1,7 @@
+// src/entities/schemas/entity.schema.ts
+
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
+import { Document, Types }             from 'mongoose';
 
 export type EntityDocument = Entity & Document;
 
@@ -10,7 +12,7 @@ export class Entity {
 
   @Prop({
     required: true,
-    unique: true,
+    unique: true,         // create índice único en cif
     uppercase: true,
     match: /^[A-Z0-9]{8,10}$/,
   })
@@ -34,6 +36,5 @@ export class Entity {
 
 export const EntitySchema = SchemaFactory.createForClass(Entity);
 
-// Índices
-EntitySchema.index({ cif: 1 }, { unique: true });
+// Eliminamos el índice manual en cif, pero mantenemos el de organizerId:
 EntitySchema.index({ organizerId: 1 });

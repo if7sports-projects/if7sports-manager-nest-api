@@ -1,5 +1,7 @@
+// src/users/schemas/user.schema.ts
+
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
+import { Document, Types }             from 'mongoose';
 
 export type UserDocument = User & Document;
 
@@ -16,7 +18,7 @@ export class User {
 
   @Prop({
     required: true,
-    unique: true,
+    unique: true,         // esto ya crea el índice único en email
     lowercase: true,
     match: /^\S+@\S+\.\S+$/,
   })
@@ -37,7 +39,6 @@ export class User {
 
 export const UserSchema = SchemaFactory.createForClass(User);
 
-// índices
-UserSchema.index({ email: 1 }, { unique: true });
+// Sólo mantenemos los índices que NO proceden de un unique en @Prop:
 UserSchema.index({ role: 1 });
 UserSchema.index({ entityId: 1 });
