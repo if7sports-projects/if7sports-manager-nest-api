@@ -1,3 +1,8 @@
+// src/app.module.ts
+/**
+ * @module AppModule
+ * @description Módulo raíz que importa módulos de configuración, conexión a MongoDB y los feature modules
+ */
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { LoggerMiddleware }                      from './common/middleware/logger.middleware';
@@ -7,10 +12,14 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { EntitiesModule } from './entities/entities.module';
 import { AuthModule } from './auth/auth.module';
+import { FieldsModule } from './fields/fields.modules';
+import { BookingsModule } from './bookings/bookings.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    // Carga de variables de entorno de manera global
+    ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
+    // Conexión a MongoDB de forma asíncrona usando ConfigService
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (config: ConfigService) => ({
@@ -21,9 +30,12 @@ import { AuthModule } from './auth/auth.module';
       }),
       inject: [ConfigService],
     }),
+    // Feature modules de la aplicación
     UsersModule,
     EntitiesModule,
     AuthModule,
+    FieldsModule,
+    BookingsModule
   ],
   controllers: [AppController],
   providers: [AppService],
