@@ -5,7 +5,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export declare class UsersService {
     private userModel;
     constructor(userModel: Model<UserDocument>);
-    create(createUserDto: CreateUserDto): Promise<UserDocument>;
+    create(createDto: CreateUserDto): Promise<UserDocument>;
     findAll(): Promise<UserDocument[]>;
-    update(id: string, updateUserDto: UpdateUserDto): Promise<UserDocument>;
+    findByEmail(email: string): Promise<UserDocument | null>;
+    update(id: string, updateDto: UpdateUserDto): Promise<UserDocument>;
 }

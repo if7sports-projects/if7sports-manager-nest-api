@@ -1,9 +1,9 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { UsersService }    from '../users/users.service';
-import { JwtService }      from '@nestjs/jwt';
-import * as bcrypt         from 'bcrypt';
-import { CreateUserDto }   from '../users/dto/create-user.dto';
-import { RegisterDto }     from './dto/register.dto';
+import { UsersService } from '../users/users.service';
+import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
+import { CreateUserDto } from '../users/dto/create-user.dto';
+import { RegisterDto } from './dto/register.dto';
 
 @Injectable()
 export class AuthService {
@@ -12,19 +12,24 @@ export class AuthService {
     private jwtService: JwtService
   ) {}
 
-    async validateUser(email: string, pass: string) {
+  async validateUser(email: string, pass: string) {
     const user = await this.usersService.findByEmail(email);
     if (!user) return null;
+
     const match = await bcrypt.compare(pass, user.passwordHash);
-    if (match) {
-      const { passwordHash, ...ret } = user;
-      return ret;
-    }
-    return null;
+    if (!match) return null;
+
+    // Devuelve el documento completo con _id incluido
+    return user;
   }
 
   async login(user: any) {
-    const payload = { email: user.email, sub: user._id, role: user.role };
+    const payload = {
+      sub: user._id?.toString?.() ?? user.id, // usa el ID como "sub"
+      email: user.email,
+      role: user.role,
+    };
+
     return {
       access_token: this.jwtService.sign(payload),
     };
@@ -35,16 +40,15 @@ export class AuthService {
     const hash = await bcrypt.hash(dto.password, salt);
 
     const createUserDto: CreateUserDto = {
-      role: 'client',               // ahora cubrimos el campo requerido
+      role: 'client',
       name: dto.name,
       email: dto.email,
       passwordHash: hash,
-      // phone, address, entityId y status son opcionales
     };
 
     const newUser = await this.usersService.create(createUserDto);
-    // quitamos el passwordHash antes de devolver
-    // suponiendo que usersService devuelve un documento Mongoose
+
+    // Devuelve el objeto sin el hash
     const { passwordHash, ...result } = newUser.toObject();
     return result;
   }

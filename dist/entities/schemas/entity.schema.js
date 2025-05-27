@@ -59,6 +59,5 @@ exports.Entity = Entity = __decorate([
     (0, mongoose_1.Schema)({ timestamps: true })
 ], Entity);
 exports.EntitySchema = mongoose_1.SchemaFactory.createForClass(Entity);
-exports.EntitySchema.index({ cif: 1 }, { unique: true });
 exports.EntitySchema.index({ organizerId: 1 });
 //# sourceMappingURL=entity.schema.js.map

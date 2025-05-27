@@ -31,6 +31,10 @@ export class UsersService {
     return this.userModel.findOne({ email }).exec();
   }
 
+  async findById(id: string): Promise<UserDocument | null> {
+    return this.userModel.findById(id).exec();
+  }
+
   async update(
     id: string,
     updateDto: UpdateUserDto
@@ -51,3 +55,4 @@ export class UsersService {
     return updated;
   }
 }
+

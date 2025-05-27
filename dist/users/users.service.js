@@ -22,8 +22,8 @@ let UsersService = class UsersService {
     constructor(userModel) {
         this.userModel = userModel;
     }
-    async create(createUserDto) {
-        const { entityId, ...rest } = createUserDto;
+    async create(createDto) {
+        const { entityId, ...rest } = createDto;
         const payload = {
             ...rest,
             ...(entityId ? { entityId: new mongoose_2.Types.ObjectId(entityId) } : {}),
@@ -34,8 +34,11 @@ let UsersService = class UsersService {
     async findAll() {
         return this.userModel.find().exec();
     }
-    async update(id, updateUserDto) {
-        const { entityId, ...rest } = updateUserDto;
+    async findByEmail(email) {
+        return this.userModel.findOne({ email }).exec();
+    }
+    async update(id, updateDto) {
+        const { entityId, ...rest } = updateDto;
         const payload = {
             ...rest,
             ...(entityId ? { entityId: new mongoose_2.Types.ObjectId(entityId) } : {}),

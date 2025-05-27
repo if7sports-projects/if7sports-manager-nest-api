@@ -15,6 +15,9 @@ const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const users_module_1 = require("./users/users.module");
 const entities_module_1 = require("./entities/entities.module");
+const auth_module_1 = require("./auth/auth.module");
+const fields_modules_1 = require("./fields/fields.modules");
+const bookings_module_1 = require("./bookings/bookings.module");
 let AppModule = class AppModule {
     configure(consumer) {
         consumer
@@ -26,7 +29,7 @@ exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            config_1.ConfigModule.forRoot({ isGlobal: true }),
+            config_1.ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
             mongoose_1.MongooseModule.forRootAsync({
                 imports: [config_1.ConfigModule],
                 useFactory: (config) => ({
@@ -36,6 +39,9 @@ exports.AppModule = AppModule = __decorate([
             }),
             users_module_1.UsersModule,
             entities_module_1.EntitiesModule,
+            auth_module_1.AuthModule,
+            fields_modules_1.FieldsModule,
+            bookings_module_1.BookingsModule
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

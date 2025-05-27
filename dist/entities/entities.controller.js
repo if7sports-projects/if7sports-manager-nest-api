@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const entities_service_1 = require("./entities.service");
 const create_entity_dto_1 = require("./dto/create-entity.dto");
 const update_entity_dto_1 = require("./dto/update-entity.dto");
+const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 let EntitiesController = class EntitiesController {
     entitiesService;
     constructor(entitiesService) {
@@ -34,6 +35,7 @@ let EntitiesController = class EntitiesController {
 };
 exports.EntitiesController = EntitiesController;
 __decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -41,12 +43,14 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], EntitiesController.prototype, "create", null);
 __decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Get)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], EntitiesController.prototype, "findAll", null);
 __decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Patch)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
