@@ -40,7 +40,7 @@ export class AuthService {
     const hash = await bcrypt.hash(dto.password, salt);
 
     const createUserDto: CreateUserDto = {
-      role: 'client',
+      role: dto.role ?? 'client',
       name: dto.name,
       email: dto.email,
       passwordHash: hash,

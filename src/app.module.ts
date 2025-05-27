@@ -14,6 +14,7 @@ import { EntitiesModule } from './entities/entities.module';
 import { AuthModule } from './auth/auth.module';
 import { FieldsModule } from './fields/fields.modules';
 import { BookingsModule } from './bookings/bookings.module';
+import { AvailabilityModule } from './availability/availability.module';
 
 @Module({
   imports: [
@@ -35,7 +36,8 @@ import { BookingsModule } from './bookings/bookings.module';
     EntitiesModule,
     AuthModule,
     FieldsModule,
-    BookingsModule
+    BookingsModule,
+    AvailabilityModule
   ],
   controllers: [AppController],
   providers: [AppService],
