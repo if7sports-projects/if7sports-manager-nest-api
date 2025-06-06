@@ -15,6 +15,9 @@ import { AuthModule } from './auth/auth.module';
 import { FieldsModule } from './fields/fields.modules';
 import { BookingsModule } from './bookings/bookings.module';
 import { AvailabilityModule } from './availability/availability.module';
+import { EventsModule } from './events/events.module';
+import { PaymentsModule } from './payments/payments.module';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
@@ -37,7 +40,10 @@ import { AvailabilityModule } from './availability/availability.module';
     AuthModule,
     FieldsModule,
     BookingsModule,
-    AvailabilityModule
+    AvailabilityModule,
+    EventsModule,
+    PaymentsModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
